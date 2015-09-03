@@ -1,0 +1,141 @@
+\documentclass[t,11pt]{beamer}
+
+\usetheme{Madrid}
+
+\usepackage{lmodern}
+\usepackage[latin1]{inputenc}
+ \usepackage[T1]{fontenc}
+
+\setcounter{tocdepth}{3}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{movie15}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{wasysym} 
+\usepackage{pdflscape}
+\usepackage{multicol}
+\usepackage{eurosym}
+\usepackage{appendixnumberbeamer} % use \appendix for the hidden slides
+
+\newcommand{\argmin}{\operatornamewithlimits{arg\:min}}
+
+% important to reduce the space between figure and text 
+\setlength{\abovecaptionskip}{-10pt}
+\setlength{\belowcaptionskip}{-18pt}
+\setbeamertemplate{caption}{\insertcaption}
+
+% disable the navigation symbols to put them inside the footline
+\setbeamertemplate{navigation symbols}{}
+
+% define your own color
+\definecolor{kyushuuniversity}{HTML}{730E34}
+\definecolor{ircad}{HTML}{006000}
+\colorlet{primary}{kyushuuniversity}
+
+\setbeamercolor*{palette primary}{bg=primary!10!white}
+
+\setbeamercolor{footline}{parent=palette primary,fg=primary,bg=primary!10!white}
+
+\setbeamercolor{titlelike}{parent=palette primary,fg=primary}
+
+\setbeamercolor{structure}{fg=primary}
+
+\setbeamertemplate{blocks}[rounded][shadow=true] 
+
+\setbeamertemplate{footline}
+{
+	\leavevmode
+	\begin{beamercolorbox}[wd=\paperwidth,ht=14pt,dp=1ex,left]{palette primary}% color the background
+	\hbox{
+	\begin{beamercolorbox}[wd=.25\paperwidth,ht=14pt,left]{}% put the institute logo here 
+		%\includegraphics[height=12pt]{../logo1.png}
+		%\includegraphics[height=12pt]{../logo2.png}
+		%\includegraphics[height=12pt]{../logo3.png}
+	\end{beamercolorbox}
+
+	\begin{beamercolorbox}[wd=.5\paperwidth,ht=14pt,center]{}% put the navigation symbols
+		% you can comment what you don't want
+		%\insertslidenavigationsymbol% change slide
+		\insertframenavigationsymbol% change frame (a set of slide), click on icon to show the whole frame
+		%\insertsubsectionnavigationsymbol% change subsection
+		%\insertsectionnavigationsymbol% change section but the backward put you on the last slide of a section...
+		%\insertdocnavigationsymbol%
+		%\insertbackfindforwardnavigationsymbol%
+		\hyperlink{outline}{\beamerreturnbutton{Outline}}% use to one instead of the sub/section symbols
+	\end{beamercolorbox}
+
+	\begin{beamercolorbox}[wd=.25\paperwidth,ht=14pt,right]{}% put the current slide number + total
+		\Large{\insertframenumber{} / \inserttotalframenumber} \hspace*{1ex}   
+	\end{beamercolorbox}
+	}
+	\end{beamercolorbox}
+	\vskip0pt
+}
+
+\setbeamertemplate{section in toc}
+{\leavevmode\leftskip=2ex%
+  \llap{%
+    \usebeamerfont*{section number projected}%
+    \usebeamercolor{section number projected}%
+    \begin{pgfpicture}{-1ex}{0ex}{1ex}{2ex}
+      \color{bg}
+      \pgfpathcircle{\pgfpoint{0pt}{.75ex}}{1.7ex}
+      \pgfusepath{fill}
+      \pgftext[base]{\color{fg}\inserttocsectionnumber}
+    \end{pgfpicture}\kern1.25ex%
+  }%
+  \inserttocsection\par
+}
+
+\setbeamercolor{subsection in toc}{fg=primary}
+\setbeamertemplate{subsection in toc}
+{\leavevmode\leftskip=4ex%
+  \llap{%
+    \usebeamerfont*{section number projected}%
+    \usebeamercolor{section number projected}%
+    \begin{pgfpicture}{-1ex}{0ex}{1ex}{2ex}
+      \color{bg}
+      \pgfpathcircle{\pgfpoint{0pt}{.75ex}}{1.7ex}
+      \pgfusepath{fill}
+      \pgftext[base]{\color{fg}\inserttocsubsectionnumber}
+      % \pgftext[base]{\color{fg}\inserttocsectionnumber.\inserttocsubsectionnumber}
+    \end{pgfpicture}\kern1.25ex%
+  }%
+  \inserttocsubsection\par
+}
+
+\newcommand{\tab}{\hspace*{0.5cm}}
+
+\AtBeginSubsection[]  % "Beamer, do the following at the start of every subsection"
+{
+\begin{frame}[c]{Outline}
+\tableofcontents[ 
+sectionstyle=show/hide, % current_section, other_section
+subsectionstyle=show/shaded/hide % current_subsection, other_subsection, other_subsection_of _other_section
+] 
+\end{frame}
+}
+
+\AtBeginSection[]  % "Beamer, do the following at the start of every section"
+{
+\begin{frame}[c]{Outline}
+\begin{multicols*}{2}
+	\tableofcontents[ 
+		sectionstyle=show/shaded, 
+		subsectionstyle=hide/hide/hide
+	]
+\end{multicols*}	
+\end{frame}
+}
+
+% hack to have the section aligned along the different columns
+\addtocontents{toc}{\vskip -0.63cm}  %new code
+
+\author{\Large{\underline{My name}}}% your name
+\institute{% your institute
+\large{My mail}% your address mail
+}
