@@ -1,0 +1,123 @@
+1. LAUNCH THE APPLICATION:
+- create a .xmind file 
+	- !!! the result is much better if the figures have a transparent background
+	- !!! LaTeX natively cannot handle list with a 4-level (or more) depth
+	- !!! empty topic or subtopic give empty slide...
+- Header.tex
+	- change the author and the institute names
+	- change the main color
+- need boost library
+- you can use the .bat file
+	- have to change the path of the different programs
+- else you have to:
+	- copy the .xmind file in a .zip file 
+	- uncompress it inside a folder which name is the one of .xmind file
+	- compile the .cpp (which need boost)
+	- launch the application: Xmind2Beamer $NAME_OF_FOLDER $FUSE_MODE
+	- compile the Temp.tex (that have to be inside the folder)
+	- save the .pdf file elsewhere
+	- erase the tempory folder
+
+	
+2. HOW IT WORKS:
+- there is an example with a .xmind file with its corresponding .pdf file
+	- all the features are presented in this example
+
+- more details on this program:
+- presentation title == principal subject title  (one principal subject is taken into account)
+- for each topics of the principal subject (ie 1. and 2.)
+	- if the section is named $m_keywordAppendix 
+		- add the "last-slide" slide
+		- add the separator \appendix to "hide" the supplementary slides
+		- the children of this section are not visited (see this section as a separator)
+		- the following sections/subsections will appear on a different ToC
+		- a new frame number is used for the appendix section
+	- create a section
+	- check if we can create a subsection 
+		- ALL the children (ie A. B.) must have children (ie a. b.) 
+		- ALL these children (ie a. b.) must have children too
+		- create a subsection 
+	- for each topic of the section or subsection 
+		- if there is an image
+			- if the slide don't have child
+				- add a new child with the image
+			- else add the image to each children
+		- check the size of elements (ie text and figure)
+			- we use several values related to the font size:
+				- we consider 5 sorts of font size: title, block, 1st-depth item, 2nd-depth item, 3rd-depth item
+				- we consider for each sort 4 values:
+					- the font width: average value of a char
+					- the line width: the maximum char that can be put on a line
+					- the line height: the height of one line
+					- the line space: additionnal space
+				- and we have the available space which is the slide height
+				- for each text (title/block/item) we add its contribution to compute the size of the element
+				- for each figure: 
+					- we change the width and height but we keep the aspect ratio
+					- we first check if the figure width is within the block width
+					- after we adapt the height according to the remaining available space [RAS]
+						- if the figure height is lesser or equal to RAS, don't change its height
+						- else we try to reduce the figure according to RAS and a parameter 
+							- this parameter $m_thresholdFigure -> how much we can reduce the height 
+								- for example, 0.4 -> 40% of the height
+							- if it is not enough, we change the height to fit the next slide
+			- if too much elements (according to the available space), the slide is cut
+				- check the children of the slide to know where to cut between the elements of the slide
+				- if it's not possible, cut between subelements (but it can be ugly)
+			- else, check the next slide and if the sum is less than the available space, fuse both slides together
+				- !!! not sure it's a good idea (sometime two very different topics can be on the same slide)
+				- thus we add three modes (second parameter of the executable, have to change in the .bat file):
+					- no fuse at all 
+					- fuse slides but not the ones that have been cut
+					- fuse all slides (can fuse the last slide obtained after a cut only)
+		- for each slide
+			- create a new frame which title == title of the topic
+			- create a new box
+			- add recursively each children as an item (itemize)
+				- !!! LaTeX natively cannot handle list with a 4-level (or more) depth 
+				- can use enumitem package but:
+					- we lose the magic [<+->] option...
+					- more than 3-depth list on one slide seems crappy so we don't allow that
+			- if we have to fuse add a new block and add elements etc
+			- if we have to cut 
+				- add a (1/X (ie the number of subslides)) in the box title
+				- create a frame + box for each subslide
+
+- add element:
+	- text is formatted to manage the special characters LaTeX restrictions 
+	- text take the style defined in the styles.xml file into account
+		- the font size (!!! not sure if it's a good idea)
+		- the color
+		- bold
+		- italic 
+	- figure (height=0.5\\baselineskip) 
+		- try to have a transparent background else it's ugly inside the colored box
+	- website link which text will be the title of the topic
+	- element markers (the first one only) will be put in the LaTeX file as the tick of the corresponding item
+		- the marker figures are normally provided with this application
+		- else you have to find it yourself (search for other-question.png for example)
+	- outline is remind for each section
+	
+- LaTeX style (mainly inside the Header.tex file):
+	- the alignement of slide elements is put to top [t]
+		- the result is better when you have cut a slide:
+			- each subslide will have its box title at the same place
+		- good to have to look at the same place 
+	- use theme Madrid  
+		- don't like the outline-on-each-slide
+	- remove some space between figure and text (below and above)
+	- keep some navigation buttons and add one to go directly on the first outline slide
+	- color definitions
+	- footline definition
+		- on the left, you can add figures of your institues
+		- on the right,we add the current slide / the total number of slides
+	- what we do for each section
+		- we add an outline in two columns with:
+			- the current section in normal font
+			- the other sections are shaded
+			- all the subsections are hidden
+	- what we do for each subsection
+		- we add an outline in one column with:
+			- the current section and subsection in normal font
+			- the other sections are hidden
+			- the other subsections are shaded
