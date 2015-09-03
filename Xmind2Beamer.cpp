@@ -881,24 +881,6 @@ void addSlideWithTitleOnly( std::ofstream& _latexFile, std::string _text )
 	_latexFile<<"\\end{beamercolorbox}"<<std::endl;
 }
 
-void addLastSlide( std::ofstream& _latexFile )
-{
-	// add the last slide
-	_latexFile << "\\begin{frame}" << std::endl;
-	_latexFile << "\\onslide<+->" << std::endl;
-	_latexFile << "\\begin{beamercolorbox}[wd=.22\\paperwidth,left,rounded=true,shadow=true]{block title}" << std::endl;
-	_latexFile << "   \\Huge{It was...}" << std::endl;
-	_latexFile << "\\end{beamercolorbox}" << std::endl;
-	_latexFile << "\\onslide<+->" << std::endl;
-	_latexFile << "\\titlepage" << std::endl;
-	_latexFile << "\\onslide<+->" << std::endl;
-	_latexFile << "\\hfill \\begin{beamercolorbox}[wd=.79\\paperwidth,left,rounded=true,shadow=true]{block title}" << std::endl;
-	_latexFile << "   \\Huge{Thank you for your attention!}" << std::endl;
-	_latexFile << "\\end{beamercolorbox}" << std::endl;
-	_latexFile << "\\end{frame}" << std::endl;
-	_latexFile << std::endl;	
-}
-
 void visitGraph( boost::property_tree::ptree _pt, std::ofstream& _latexFile , int _depth, bool& _appendix)
 {
 	using boost::property_tree::ptree;
@@ -915,8 +897,9 @@ void visitGraph( boost::property_tree::ptree _pt, std::ofstream& _latexFile , in
 			{
 				if( text == m_keywordAppendix )// special separator for the supplementary (hidden) slides
 				{
-					addLastSlide( _latexFile );
+					_latexFile << "..\/LastSlide" << std::endl;
 					
+					_latexFile << std::endl;
 					_latexFile << "\\appendix" << std::endl;
 					_latexFile << std::endl;
 					_appendix = true;
@@ -1098,7 +1081,7 @@ void main( int argc, char** argv)
 	// add the last slide if there wasn't an appendix section
 	if( !appendix )
 	{
-		addLastSlide( latexFile );
+		latexFile << "..\/LastSlide" << std::endl;
 	}
 
 	latexFile <<"\\end{document}"<<std::endl;
